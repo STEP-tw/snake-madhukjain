@@ -5,6 +5,7 @@ let numberOfCols=120;
 
 let animator=undefined;
 let check=undefined;
+let anotherCheck=undefined;
 
 const animateSnake=function() {
   let oldHead=snake.getHead();
@@ -44,7 +45,7 @@ const addKeyListener=function() {
 
 const createSnake=function() {
   check=setInterval(isSnakeAtBorder,100);
-
+  anotherCheck = setInterval (snakeStrikeItself,100);
   let tail=new Position(12,10,"east");
   let body=[];
   body.push(tail);
@@ -68,11 +69,24 @@ const startGame=function() {
   animator=setInterval(animateSnake,140);
 }
 
+const snakeStrikeItself = function(){
+  for (var index=0; index<snake.body.length;index++){
+    let snakeHead= snake.head.x;
+    let snakeBody = snake.head.y;
+    if (snakeHead == snake.body[index].x) {
+      if (snakeBody == snake.body[index].y) {
+        alert("Game Over");
+        return stopGame();
+      }
+    }
+  }
+}
+
 const isSnakeAtBorder= function(){
-  if(snake.head.x >= 120 || snake.head.x < 0){
+  if(snake.head.x >= numberOfCols || snake.head.x < 0){
     return stopGame();
   }
-  if (snake.head.y < 0 || snake.head.y >=60) {
+  if (snake.head.y < 0 || snake.head.y >= numberOfRows) {
     return stopGame();
   }
 }
