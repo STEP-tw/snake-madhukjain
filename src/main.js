@@ -4,11 +4,13 @@ let numberOfRows=60;
 let numberOfCols=120;
 
 let animator=undefined;
+let check=undefined;
 
 const animateSnake=function() {
   let oldHead=snake.getHead();
   let oldTail=snake.move();
   let head=snake.getHead();
+  console.log(snake.body);
   paintBody(oldHead);
   unpaintSnake(oldTail);
   paintHead(head);
@@ -41,12 +43,13 @@ const addKeyListener=function() {
 }
 
 const createSnake=function() {
+  check=setInterval(isSnakeAtBorder,100);
+
   let tail=new Position(12,10,"east");
   let body=[];
   body.push(tail);
   body.push(tail.next());
   let head=tail.next().next();
-
   snake=new Snake(head,body);
 }
 
@@ -61,7 +64,20 @@ const startGame=function() {
   createFood(numberOfRows,numberOfCols);
   drawFood(food);
   addKeyListener();
+
   animator=setInterval(animateSnake,140);
 }
 
+const isSnakeAtBorder= function(){
+  if(snake.head.x >= 120 || snake.head.x < 0){
+    return stopGame();
+  }
+  if (snake.head.y < 0 || snake.head.y >=60) {
+    return stopGame();
+  }
+}
+
+const stopGame = function(){
+  location.reload();
+}
 window.onload=startGame;
